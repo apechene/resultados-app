@@ -51,10 +51,10 @@ const TableroLoterias = () => {
   useEffect(() => {
     const intervalId = setInterval(() => {
       fetchResultados();
-    }, 2 * 60 * 60 * 1000); // 2 hours in milliseconds
+    }, 20 * 60 * 1000); // 20 minutes in milliseconds
 
     return () => clearInterval(intervalId);
-    console.log(intervalId);
+  
   }, []);
 
   return (
