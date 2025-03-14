@@ -13,8 +13,8 @@ const TableroLoterias = () => {
   useEffect(() => {
     const fetchResultados = async () => {
       try {
-        const hoy = subDays(new Date(), 1);
-        const ultimos7Dias = Array.from({ length: 7 }).map((_, i) =>
+        const hoy = subDays(new Date(), 0);
+        const ultimos7Dias = Array.from({ length: 8 }).map((_, i) =>
           format(subDays(hoy, i), "yyyy-MM-dd")
         );
        
@@ -44,25 +44,23 @@ const TableroLoterias = () => {
     };
 
     fetchResultados();
+
+    const intervalId = setInterval(() => {
+      fetchResultados(); 
+    }, 20 * 60 * 1000); // 20 minutes in milliseconds
+
+    return () => clearInterval(intervalId);
   }, []);
 
   const diasSemana = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
 
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      fetchResultados();
-    }, 20 * 60 * 1000); // 20 minutes in milliseconds
-
-    return () => clearInterval(intervalId);
-  
-  }, []);
 
   return (
    
     <div className="container mt-4">
        <h1 className="text-center">Resultado de Loterías</h1>
       <div className="row">
-        {Array.from({ length: 8 }).map((_, index) => {
+        {Array.from({ length:8 }).map((_, index) => {
           const fecha = format(subDays(new Date(), index), "yyyy-MM-dd");
           const diaSemana = diasSemana[getDay(parseISO(fecha))];
           const loteriasDelDia = resultados.filter((resultado) => resultado.date === fecha);
@@ -88,7 +86,7 @@ const TableroLoterias = () => {
           );
         })}
         <div className="col-12 text-center mt-4">
-          <video width="" height="240" autoPlay loop muted>
+          <video width="80%" height="300" autoPlay loop muted>
             <source src="./intro.mp4" type="video/mp4" />
             Your browser does not support the video tag.
           </video>
